@@ -4,12 +4,14 @@ import hashlib
 
 
 class hibpcheck():
-    def __init__(self, pw):
+    def __init__(self, pw=''):
         self.count = 0
         self.found = False
-        self.password(pw)
+        if pw:
+            self.password(pw)
 
     def password(self, pw):
+        self.count = 0
         self.found = False
 
         pw_hash = hashlib.sha1(pw.encode()).hexdigest().upper()
@@ -26,11 +28,7 @@ class hibpcheck():
             breached_hash, breach_count = line.split(':')
             if short_hash + breached_hash == pw_hash:
                 self.found = True
+                self.count = int(breach_count)
                 break
-
-        if self.found:
-            self.count = int(breach_count)
-        else:
-            self.count = 0
 
         return self.found
