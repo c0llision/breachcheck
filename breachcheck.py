@@ -5,7 +5,8 @@ from getpass import getpass
 
 
 def query_hibp(pw):
-    ''' gets list of pwned hashes from hibp'''
+    ''' returns number of times password appeared in dataset
+    returns 0 if password was not found'''
     pw_hash = hashlib.sha1(pw.encode()).hexdigest().upper()
     short_hash = pw_hash[:5]
 
@@ -22,17 +23,24 @@ def query_hibp(pw):
             found = True
             break
 
-    if found:
-        print('WARNING: password was FOUND!')
-        print('This password appeared in the dataset ' +
-              breach_count + " times")
+    if not found:
+        breach_count = 0
     else:
-        print('Password was not found in the dataset')
+        breach_count = max(1, int(breach_count))
+
+    return breach_count
 
 
 def main():
     password = getpass()
-    query_hibp(password)
+    breach_count = query_hibp(password)
+
+    if breach_count > 0:
+        print('WARNING: password was FOUND!')
+        print('This password appeared in the dataset ' +
+              str(breach_count) + " times")
+    else:
+        print('Password was not found in the dataset')
 
 
 if __name__ == '__main__':
