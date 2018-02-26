@@ -7,6 +7,7 @@ from getpass import getpass
 def query_hibp(pw):
     ''' gets list of pwned hashes from hibp'''
     pw_hash = hashlib.sha1(pw.encode()).hexdigest().upper()
+
     r = requests.get('https://api.pwnedpasswords.com/range/' + pw_hash[:5])
 
     if r.status_code != 200:
@@ -25,7 +26,7 @@ def query_hibp(pw):
         print('This password appeared in the dataset ' +
               breach_count + " times")
     else:
-        print('Password was not found')
+        print('Password was not found in the dataset')
 
 
 def main():
