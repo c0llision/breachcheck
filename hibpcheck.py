@@ -15,7 +15,7 @@ class hibpcheck():
         self.found = False
 
         pw_hash = hashlib.sha1(pw.encode()).hexdigest().upper()
-        short_hash = pw_hash[:5]
+        short_hash, long_hash = pw_hash[:5], pw_hash[5:]
 
         r = requests.get('https://api.pwnedpasswords.com/range/' + short_hash)
 
@@ -26,7 +26,7 @@ class hibpcheck():
 
         for line in r.text.split():
             breached_hash, breach_count = line.split(':')
-            if short_hash + breached_hash == pw_hash:
+            if breached_hash == long_hash:
                 self.found = True
                 self.count = int(breach_count)
                 break
