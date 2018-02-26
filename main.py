@@ -5,11 +5,11 @@ from hibpcheck import hibpcheck
 
 def main():
     password = getpass()
-    check = hibpcheck(password)
-    if check.found:
+    hibp = hibpcheck(password)
+    if hibp.found:
         print('WARNING: password was FOUND!')
         print('This password appeared in the dataset ' +
-              str(check.count) + " times")
+              str(hibp.count) + " times")
     else:
         print('Password was not found in the dataset')
 
