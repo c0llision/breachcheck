@@ -7,8 +7,9 @@ from getpass import getpass
 def query_hibp(pw):
     ''' gets list of pwned hashes from hibp'''
     pw_hash = hashlib.sha1(pw.encode()).hexdigest().upper()
+    short_hash = pw_hash[:5]
 
-    r = requests.get('https://api.pwnedpasswords.com/range/' + pw_hash[:5])
+    r = requests.get('https://api.pwnedpasswords.com/range/' + short_hash)
 
     if r.status_code != 200:
         raise Exception('Error occurred quering server, got HTTP status code:',
@@ -17,7 +18,7 @@ def query_hibp(pw):
     found = False
     for line in r.text.split():
         breached_hash, breach_count = line.split(':')
-        if breached_hash in pw_hash:
+        if short_hash + breached_hash == pw_hash:
             found = True
             break
 
