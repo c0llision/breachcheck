@@ -22,7 +22,7 @@ class hibpcheck():
 
         try:
             r = requests.get('https://api.pwnedpasswords.com/range/' +
-                short_hash)
+                             short_hash)
         except requests.exceptions.ConnectionError:
             raise ConnectionError(
                 'Error connecting to server, check your internet connection')
