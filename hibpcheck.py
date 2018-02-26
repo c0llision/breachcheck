@@ -10,7 +10,6 @@ class hibpcheck():
         self.password(pw)
 
     def password(self, pw):
-        self.pw = pw
         self.found = False
 
         pw_hash = hashlib.sha1(pw.encode()).hexdigest().upper()
