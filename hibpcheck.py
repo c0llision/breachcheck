@@ -4,11 +4,13 @@ import hashlib
 
 
 class hibpcheck():
-    def __init__(self, pw=''):
+    def __init__(self, password=''):
+        '''Queries HIBP for the password using k-Anonymity.
+        pasword (optional): Password to query'''
         self.count = 0
         self.found = False
-        if pw:
-            self.password(pw)
+        if password:
+            self.password(password)
 
     def password(self, pw):
         self.count = 0
@@ -17,10 +19,15 @@ class hibpcheck():
         pw_hash = hashlib.sha1(pw.encode()).hexdigest().upper()
         short_hash, long_hash = pw_hash[:5], pw_hash[5:]
 
-        r = requests.get('https://api.pwnedpasswords.com/range/' + short_hash)
+        try:
+            r = requests.get('https://api.pwnedpasswords.com/range/' + short_hash)
+        except requests.exceptions.ConnectionError:
+            raise ConnectionError(
+                'Error connecting to server, check your internet connection')
+
 
         if r.status_code != 200:
-            raise Exception(
+            raise ConnectionError(
                 'Error occurred quering server, got HTTP status code:',
                 r.status_code)
 
