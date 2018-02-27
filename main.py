@@ -1,11 +1,17 @@
 #!/usr/bin/env python3
 from getpass import getpass
-from hibpcheck import hibpcheck
+from hibpcheck import hibpPassword, hibpEmail
 
 
 def main():
+    # email = input('Email:')
+    # hbp = hibpEmail(email)
+    # if hbp.found:
+    #    print("found")
+    #    print (str(hbp.count))
+    
     password = getpass()
-    hibp = hibpcheck(password)
+    hibp = hibpPassword(password)
     if hibp.found:
         print('WARNING: password was FOUND!')
         print('This password appeared in the dataset ' +

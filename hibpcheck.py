@@ -1,9 +1,38 @@
 #!/usr/bin/env python3
 import requests
 import hashlib
+import json
 
 
-class hibpcheck():
+class hibpEmail():
+    def __init__(self, email=''):
+        self.found = False
+        self.count = 0
+
+        if email:
+            self.email(email)
+
+    def email(self, email):
+        self.found = False
+        self.count = 0
+
+        r = requests.get('https://haveibeenpwned.com/api/v2/breachedaccount/' +
+                         email + '?truncateResponse=true')
+
+        if r.status_code == 404:
+            return False
+
+        if r.status_code != 200:
+            raise ConnectionError(
+                'Error occurred quering server, got HTTP status code:',
+                r.status_code)
+
+        data = json.loads(r.text)
+        self.found = True
+        self.count = len(data)
+
+
+class hibpPassword():
     def __init__(self, password=''):
         '''Queries HIBP for the password using k-Anonymity.
         pasword (optional): Password to query'''
